@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jun.mybatis.example.mappers.UserMapper">
+
+    <!-- Example 1 -->
+    <resultMap id="UserMap1" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="age" column="age"/>
+        <association property="card" column="card_id"
+                     select="jun.mybatis.example.mappers.CardMapper.queryByCardId">
+        </association>
+    </resultMap>
+    <select id="queryByUserId1" resultMap="UserMap1"
+            parameterType="int" resultType="User">
+        SELECT user_id, username, age, card_id
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- Example 2 -->
+    <resultMap id="CardMap2" type="Card">
+        <id property="cardId" column="card_id"/>
+        <result property="cardNum" column="card_num"/>
+        <result property="address" column="address"/>
+    </resultMap>
+    <resultMap id="UserMap2" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="age" column="age"/>
+        <association property="card" resultMap="CardMap2">
+        </association>
+    </resultMap>
+    <select id="queryByUserId2" resultMap="UserMap2" parameterType="int">
+        SELECT u.user_id, u.username, u.age, c.card_id, c.card_num, c.address
+        FROM user u,
+             card c
+        WHERE u.card_id = c.card_id
+          AND u.user_id = #{userId}
+    </select>
+
+    <!-- Example 3 -->
+    <resultMap id="UserMap3" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="age" column="age"/>
+        <association property="card" column="card_id" javaType="Card">
+            <id property="cardId" column="card_id"/>
+            <result property="cardNum" column="card_num"/>
+            <result property="address" column="address"/>
+        </association>
+    </resultMap>
+    <select id="queryByUserId3" resultMap="UserMap3" parameterType="int">
+        SELECT u.user_id, u.username, u.age, c.card_id, c.card_num, c.address
+        FROM user u,
+             card c
+        WHERE u.card_id = c.card_id
+          AND u.user_id = #{userId}
+    </select>
+
+</mapper>

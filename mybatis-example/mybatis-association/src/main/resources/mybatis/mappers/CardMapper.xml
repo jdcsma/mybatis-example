@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jun.mybatis.example.mappers.CardMapper">
+
+    <resultMap id="CardMap1" type="Card">
+        <id property="cardId" column="card_id"/>
+        <result property="cardNum" column="card_num"/>
+        <result property="address" column="address"/>
+    </resultMap>
+
+    <select id="queryByCardId" resultMap="CardMap1"
+            parameterType="int" resultType="Card">
+        SELECT *
+        FROM card
+        WHERE card_id = #{cardId}
+    </select>
+</mapper>

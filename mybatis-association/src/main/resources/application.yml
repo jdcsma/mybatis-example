@@ -1,0 +1,30 @@
+# Common
+
+debug: true
+
+server:
+  port: 8080
+
+# Spring Framework
+
+spring:
+  profiles:
+    active: default
+  datasource:
+    druid:
+      name: mybatis_association
+      url: jdbc:mysql://localhost:3306/mybatis_association?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false&AllowPublicKeyRetrieval=True
+      username: root
+      password: root
+      driverClassName: com.mysql.cj.jdbc.Driver
+      initialSize: 1
+      maxActive: 1
+      minIdle: 1
+      validationQuery: "SELECT '1'"
+      testOnBorrow: false
+      testOnReturn: false
+      testWhileIdle: true
+      keepAlive: true
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 30000
+      filters: wall

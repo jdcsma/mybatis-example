@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jun.mybatis.example.mappers.UserMapper">
+
+    <!-- Example 1 -->
+    <resultMap id="UserMap1" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="age" column="age"/>
+        <collection property="phones" column="user_id"
+                    select="jun.mybatis.example.mappers.PhoneMapper.queryByUserId1">
+        </collection>
+    </resultMap>
+    <select id="queryByUserId1" resultMap="UserMap1"
+            parameterType="int" resultType="User">
+        SELECT user_id, username, age
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- Example 2 -->
+    <resultMap id="PhoneMap2" type="Phone">
+        <id property="phoneId" column="phone_id"/>
+        <result property="brand" column="brand"/>
+        <result property="price" column="price"/>
+        <association property="user" resultMap="UserMap2"/>
+    </resultMap>
+    <resultMap id="UserMap2" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="age" column="age"/>
+        <collection property="phones" resultMap="PhoneMap2"/>
+    </resultMap>
+    <select id="queryByUserId2" resultMap="UserMap2"
+            parameterType="int" resultType="User">
+        SELECT u.user_id, u.username, u.age, p.phone_id, p.brand, p.price
+        FROM user u,
+             phone p
+        WHERE u.user_id = p.user_id
+          AND u.user_id = #{userId}
+    </select>
+
+    <resultMap id="UserMap3" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="age" column="age"/>
+        <collection property="phones" column="user_id" ofType="Phone">
+            <id property="phoneId" column="phone_id"/>
+            <result property="brand" column="brand"/>
+            <result property="price" column="price"/>
+            <association property="user" resultMap="UserMap3"/>
+        </collection>
+    </resultMap>
+    <select id="queryByUserId3" resultMap="UserMap3"
+            parameterType="int" resultType="User">
+        SELECT u.user_id, u.username, u.age, p.phone_id, p.brand, p.price
+        FROM user u,
+             phone p
+        WHERE u.user_id = p.user_id
+          AND u.user_id = #{userId}
+    </select>
+
+</mapper>
